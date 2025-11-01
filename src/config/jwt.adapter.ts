@@ -24,9 +24,15 @@ export class JwtAdapter {
     });
   };
 
-  static validateToken(token: string) {
-    throw new Error('Not implemented');
+  static validateToken = <T extends object>(
+    token: string
+  ): Promise<T | null> => {
+    return new Promise((resolve) => {
+      jwt.verify(token, JWT_SEED, (err, decoded) => {
+        if (err) return resolve(null);
 
-    return;
-  }
+        resolve(decoded as T);
+      });
+    });
+  };
 }
