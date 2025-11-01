@@ -1,4 +1,5 @@
 import { bcryptAdapter } from '../../config/bcrypt.adapter';
+import { JwtAdapter } from '../../config/jwt.adapter';
 import { UserModel } from '../../data/mongo/models/user.model';
 import { AuthDatasource } from '../../domain/datasources/auth.datasource';
 import { LoginUserDto } from '../../domain/dtos/auth/login-user.dto';
@@ -49,9 +50,16 @@ export class AuthDatasourceImpl implements AuthDatasource {
 
     const { password, ...userEntity } = UserEntity.fromObject(user);
 
+    const token = await JwtAdapter.generateToken({
+      id: user.id,
+      email: user.email,
+    });
+
+    if (!token) throw CustomError.internalServer('Error while creating JWT');
+
     return {
       user: userEntity,
-      token: 'ABC',
+      token,
     };
   };
 }

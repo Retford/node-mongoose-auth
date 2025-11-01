@@ -9,5 +9,5 @@ export abstract class AuthDatasource {
 
   abstract loginUser(
     loginUserDto: LoginUserDto
-  ): Promise<{ user: Omit<UserEntity, 'password'>; token: string }>;
+  ): Promise<{ user: Omit<UserEntity, 'password'>; token:string}>;
 }

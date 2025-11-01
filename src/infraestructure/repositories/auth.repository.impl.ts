@@ -11,11 +11,6 @@ export class AuthRepositoryImpl implements AuthRepository {
   ): Promise<{ user: Omit<UserEntity, 'password'>; token: string }> {
     return this.authDatasource.loginUser(loginUserDto);
   }
-  // LoginUser(
-  //   loginUserDto: LoginUserDto
-  // ): Promise<{ user: UserEntity; token: string }> {
-  //   return this.authDatasource.loginUser(loginUserDto);
-  // }
 
   registerUser(
     registerUserDto: RegisterUserDto
