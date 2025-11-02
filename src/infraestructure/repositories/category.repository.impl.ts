@@ -17,7 +17,7 @@ export class CategoryRepositoryImpl implements CategoryRepository {
   createCategory(
     createCategoryDto: CreateCategoryDto,
     user: UserEntity
-  ): Promise<Omit<CategoryEntity, 'user'>> {
+  ): Promise<CategoryEntity> {
     return this.categoryDatasource.createCategory(createCategoryDto, user);
   }
 }

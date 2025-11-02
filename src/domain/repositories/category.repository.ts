@@ -9,7 +9,7 @@ export abstract class CategoryRepository {
   abstract createCategory(
     createCategoryDto: CreateCategoryDto,
     user: UserEntity
-  ): Promise<Omit<CategoryEntity, 'user'>>;
+  ): Promise<CategoryEntity>;
   abstract getCategories(
     paginationDto: PaginationDto
   ): Promise<CategoryResponse>;

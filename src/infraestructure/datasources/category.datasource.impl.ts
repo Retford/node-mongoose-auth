@@ -13,7 +13,7 @@ export interface CategoryResponse {
   totalPages: number;
   next: string | null;
   prev: string | null;
-  categories: Omit<CategoryEntity, 'user'>[];
+  categories: CategoryEntity[];
 }
 
 export class CategoryDatasourceImpl implements CategoryDatasource {
@@ -43,11 +43,9 @@ export class CategoryDatasourceImpl implements CategoryDatasource {
             : null,
         prev:
           page > 1 ? `/api/categories?page=${page - 1}&limit=${limit}` : null,
-        categories: categories.map((category) => ({
-          id: category.id,
-          name: category.name,
-          available: category.available,
-        })),
+        categories: categories.map((category) =>
+          CategoryEntity.fromObject(category)
+        ),
       };
     } catch (error) {
       throw CustomError.internalServer('Internal server error');
@@ -57,7 +55,7 @@ export class CategoryDatasourceImpl implements CategoryDatasource {
   createCategory = async (
     createCategoryDto: CreateCategoryDto,
     user: UserEntity
-  ): Promise<Omit<CategoryEntity, 'user'>> => {
+  ): Promise<CategoryEntity> => {
     const categoryExists = await CategoryModel.findOne({
       name: createCategoryDto.name,
     });
@@ -72,11 +70,7 @@ export class CategoryDatasourceImpl implements CategoryDatasource {
 
       await category.save();
 
-      return {
-        id: category.id,
-        available: category.available,
-        name: category.name,
-      };
+      return CategoryEntity.fromObject(category);
     } catch (error) {
       throw CustomError.internalServer('Internal server error');
     }
