@@ -26,8 +26,9 @@ export class ProductDatasourceImpl implements ProductDatasource {
         ProductModel.countDocuments(),
         ProductModel.find()
           .skip((page - 1) * limit)
-          .limit(limit),
-        // TODO: populate
+          .limit(limit)
+          .populate('user')
+          .populate('category'),
       ]);
 
       const totalPages = Math.ceil(total / limit);
@@ -45,7 +46,7 @@ export class ProductDatasourceImpl implements ProductDatasource {
         products: products.map((product) => ProductEntity.fromObject(product)),
       };
     } catch (error) {
-      throw CustomError.internalServer('Internal server error');
+      throw CustomError.internalServer('Internal server error' + error);
     }
   };
 
@@ -63,7 +64,7 @@ export class ProductDatasourceImpl implements ProductDatasource {
 
       await product.save();
 
-      return ProductEntity.fromObject(product.toObject());
+      return ProductEntity.fromObject(product);
     } catch (error) {
       throw CustomError.internalServer('Internal server error ');
     }

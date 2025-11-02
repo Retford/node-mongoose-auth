@@ -1,0 +1,49 @@
+import { MongoDatabase } from '../mongo/mongo-database';
+import { envs } from '../../config/envs';
+import { UserModel } from '../mongo/models/user.model';
+import { ProductModel } from '../mongo/models/product.model';
+import { CategoryModel } from '../mongo/models/category.model';
+import { seedData } from './data';
+
+(async () => {
+  await MongoDatabase.connect({
+    dbName: envs.MONGO_DB_NAME,
+    mongoUrl: envs.MONGO_URL,
+  });
+  await main();
+
+  await MongoDatabase.disconnect();
+})();
+
+const randomBetween0AndX = (x: number) => Math.floor(Math.random() * x);
+
+async function main() {
+  // 0. Borrar todo
+  await Promise.all([
+    UserModel.deleteMany(),
+    CategoryModel.deleteMany(),
+    ProductModel.deleteMany(),
+  ]);
+
+  // 1. Crear usuarios
+  const users = await UserModel.insertMany(seedData.users);
+
+  // 2. Crear categorías
+  const categories = await CategoryModel.insertMany(
+    seedData.categories.map((category) => ({
+      ...category,
+      user: users[0]?._id,
+    }))
+  );
+  // 3. Crear productos
+  await ProductModel.insertMany(
+    seedData.products.map((product) => ({
+      ...product,
+      user: users[randomBetween0AndX(seedData.users.length - 1)]?._id,
+      category:
+        categories[randomBetween0AndX(seedData.categories.length - 1)]?._id,
+    }))
+  );
+
+  console.log('SEEDED');
+}

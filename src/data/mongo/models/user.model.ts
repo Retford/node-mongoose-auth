@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -29,6 +29,15 @@ const userSchema = new mongoose.Schema({
     type: [String],
     default: ['USER_ROLE'],
     enum: ['ADMIN_ROLE', 'USER_ROLE'],
+  },
+});
+
+userSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform(doc, ret: any, options) {
+    delete ret._id;
+    delete ret.password;
   },
 });
 
