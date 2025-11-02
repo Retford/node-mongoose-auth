@@ -1,14 +1,16 @@
-import { CategoryEntity } from '../../entities/category.entity';
+import { PaginationDto } from '../../dtos/shared/pagination.dto';
 import { CategoryRepository } from '../../repositories/category.repository';
 
+import type { CategoryResponse } from '../../../infraestructure/datasources/category.datasource.impl';
+
 export interface CategoryUseCase {
-  execute(): Promise<Omit<CategoryEntity, 'user'>[]>;
+  execute(paginationDto: PaginationDto): Promise<CategoryResponse>;
 }
 
 export class GetCategories implements CategoryUseCase {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  execute(): Promise<Omit<CategoryEntity, 'user'>[]> {
-    return this.categoryRepository.getCategories();
+  execute(paginationDto: PaginationDto): Promise<CategoryResponse> {
+    return this.categoryRepository.getCategories(paginationDto);
   }
 }

@@ -3,12 +3,15 @@ import { CategoryDatasource } from '../../domain/datasources/category.datasource
 import { CreateCategoryDto } from '../../domain/dtos/category/create-category.dto';
 import { UserEntity } from '../../domain/entities/user.entity';
 import { CategoryEntity } from '../../domain/entities/category.entity';
+import { PaginationDto } from '../../domain/dtos/shared/pagination.dto';
+
+import type { CategoryResponse } from '../datasources/category.datasource.impl';
 
 export class CategoryRepositoryImpl implements CategoryRepository {
   constructor(private readonly categoryDatasource: CategoryDatasource) {}
 
-  getCategories(): Promise<Omit<CategoryEntity, 'user'>[]> {
-    return this.categoryDatasource.getCategories();
+  getCategories(paginationDto: PaginationDto): Promise<CategoryResponse> {
+    return this.categoryDatasource.getCategories(paginationDto);
   }
 
   createCategory(

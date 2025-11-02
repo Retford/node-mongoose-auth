@@ -5,6 +5,7 @@ import { CreateCategoryDto } from '../../domain/dtos/category/create-category.dt
 import { CategoryRepository } from '../../domain/repositories/category.repository';
 import { CreateCategory } from '../../domain/use-cases/category/create';
 import { GetCategories } from '../../domain/use-cases/category/get';
+import { PaginationDto } from '../../domain/dtos/shared/pagination.dto';
 
 export class CategoryController {
   // DI
@@ -30,8 +31,12 @@ export class CategoryController {
   };
 
   getCategories = async (req: Request, res: Response) => {
+    const [error, paginationDto] = PaginationDto.create(req.query);
+
+    if (error) return res.status(400).json({ error });
+
     new GetCategories(this.categoryRepository)
-      .execute()
+      .execute(paginationDto!)
       .then((categories) => res.status(200).json(categories))
       .catch((error) => this.handleError(error, res));
   };
