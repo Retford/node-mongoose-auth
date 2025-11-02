@@ -7,4 +7,5 @@ export abstract class CategoryRepository {
     createCategoryDto: CreateCategoryDto,
     user: UserEntity
   ): Promise<Omit<CategoryEntity, 'user'>>;
+  abstract getCategories(): Promise<Omit<CategoryEntity, 'user'>[]>;
 }

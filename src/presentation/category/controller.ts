@@ -4,6 +4,7 @@ import { CustomError } from '../../domain/errors/custom.error';
 import { CreateCategoryDto } from '../../domain/dtos/category/create-category.dto';
 import { CategoryRepository } from '../../domain/repositories/category.repository';
 import { CreateCategory } from '../../domain/use-cases/category/create';
+import { GetCategories } from '../../domain/use-cases/category/get';
 
 export class CategoryController {
   // DI
@@ -29,6 +30,9 @@ export class CategoryController {
   };
 
   getCategories = async (req: Request, res: Response) => {
-    res.json('Get categories');
+    new GetCategories(this.categoryRepository)
+      .execute()
+      .then((categories) => res.status(200).json(categories))
+      .catch((error) => this.handleError(error, res));
   };
 }

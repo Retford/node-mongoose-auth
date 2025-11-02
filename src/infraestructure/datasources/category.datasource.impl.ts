@@ -6,6 +6,20 @@ import { UserEntity } from '../../domain/entities/user.entity';
 import { CustomError } from '../../domain/errors/custom.error';
 
 export class CategoryDatasourceImpl implements CategoryDatasource {
+  getCategories = async (): Promise<Omit<CategoryEntity, 'user'>[]> => {
+    try {
+      const categories = await CategoryModel.find();
+
+      return categories.map((category) => ({
+        id: category.id,
+        name: category.name,
+        available: category.available,
+      }));
+    } catch (error) {
+      throw CustomError.internalServer('Internal server Error');
+    }
+  };
+
   createCategory = async (
     createCategoryDto: CreateCategoryDto,
     user: UserEntity

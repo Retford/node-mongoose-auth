@@ -6,6 +6,11 @@ import { CategoryEntity } from '../../domain/entities/category.entity';
 
 export class CategoryRepositoryImpl implements CategoryRepository {
   constructor(private readonly categoryDatasource: CategoryDatasource) {}
+
+  getCategories(): Promise<Omit<CategoryEntity, 'user'>[]> {
+    return this.categoryDatasource.getCategories();
+  }
+
   createCategory(
     createCategoryDto: CreateCategoryDto,
     user: UserEntity
