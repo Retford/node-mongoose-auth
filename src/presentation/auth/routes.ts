@@ -13,7 +13,8 @@ export class AuthRoutes {
     const emailDatasource = new EmailDatasourceImpl(
       envs.MAILER_SERVICE,
       envs.MAILER_EMAIL,
-      envs.MAILER_SECRET_KEY
+      envs.MAILER_SECRET_KEY,
+      envs.SEND_EMAIL
     );
     const emailRepository = new EmailRepositoryImpl(emailDatasource);
 

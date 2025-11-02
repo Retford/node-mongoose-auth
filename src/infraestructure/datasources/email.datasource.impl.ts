@@ -9,18 +9,20 @@ export class EmailDatasourceImpl implements EmailRepository {
   private transporter: Transporter;
 
   constructor(
-    private readonly mailerService: string,
-    private readonly mailerEmail: string,
-    private readonly senderEmailPassword: string
+    mailerService: string,
+    mailerEmail: string,
+    senderEmailPassword: string,
+    private readonly postToProvider: boolean
   ) {
     this.transporter = nodemailer.createTransport({
-      service: this.mailerService,
+      service: mailerService,
       auth: {
-        user: this.mailerEmail,
-        pass: this.senderEmailPassword,
+        user: mailerEmail,
+        pass: senderEmailPassword,
       },
     });
   }
+
   validateEmail = async (token: string): Promise<boolean> => {
     const payload = await JwtAdapter.validateToken<{ email: string }>(token);
     if (!payload) throw CustomError.unauthorized('Invalid token');
@@ -43,6 +45,8 @@ export class EmailDatasourceImpl implements EmailRepository {
     const { to, subject, htmlBody, attachments = [] } = options;
 
     try {
+      if (!this.postToProvider) return true;
+
       await this.transporter.sendMail({
         to: to,
         subject: subject,
