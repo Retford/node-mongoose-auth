@@ -5,14 +5,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Name is required'],
   },
+
   email: {
     type: String,
     required: [true, 'Email is required'],
   },
+
   emailValidated: {
     type: Boolean,
     default: false,
   },
+
   password: {
     type: String,
     required: [true, 'Password is required'],
@@ -21,6 +24,7 @@ const userSchema = new mongoose.Schema({
   img: {
     type: String,
   },
+
   role: {
     type: [String],
     default: ['USER_ROLE'],

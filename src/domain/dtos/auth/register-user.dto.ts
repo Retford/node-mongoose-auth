@@ -7,7 +7,7 @@ export class RegisterUserDto {
     public readonly password: string
   ) {}
 
-  static create(object: { [key: string]: any }): [string?, RegisterUserDto?] {
+  static create(object: { [key: string]: any } = {}): [string?, RegisterUserDto?] {
     const { name, email, password } = object;
 
     if (!name) return ['Missing name'];

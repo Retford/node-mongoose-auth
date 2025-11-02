@@ -6,7 +6,7 @@ export class LoginUserDto {
     public readonly password: string
   ) {}
 
-  static create(object: { [key: string]: any }): [string?, LoginUserDto?] {
+  static create(object: { [key: string]: any } = {}): [string?, LoginUserDto?] {
     const { email, password } = object;
 
     if (!email) return ['Missing email'];
